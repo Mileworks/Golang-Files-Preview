@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  plm-file-preview:
+    image: registry.cn-hangzhou.aliyuncs.com/plm-services/plm_files_preview:latest
+    container_name: plm-file-preview-services
+    ports:
+      - 8079:8079
+    #volumes:
+    #- "fonts:/usr/share/fonts/chienes"
+    command:
+       - /bin/sh
+         - -c
+         - |
+           cd /usr/share/fonts/chienes
+           mkfontscale
+           mkfontdir
+           fc-cache -fv
