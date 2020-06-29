@@ -8,6 +8,10 @@
 4、支持txt,java,php,py,md,js,css等所有纯文本  
 5、支持jpg，jpeg，png，gif等图片预览
 
+在线体验
+
+地址：[http://39.99.153.68:8079](http://39.99.153.68:8079)
+
 效果图
 
 ![avatar](/tmp/bg.jpg)
