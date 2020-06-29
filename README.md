@@ -12,7 +12,7 @@
 
 ![avatar](/tmp/bg.jpg)
 
-构建镜像步骤
+构建镜像步骤  
 1、首先构建基础环境镜像  
 `docker build -t plm-files-preview-services -f Dockerfile .`  
 
