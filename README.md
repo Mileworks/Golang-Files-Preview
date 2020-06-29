@@ -13,8 +13,8 @@
 ![avatar](/tmp/bg.jpg)
 
 构建镜像步骤
-1、首先构建基础环境镜像
-`docker build -t plm-files-preview-services -f Dockerfile .`
+1、首先构建基础环境镜像  
+`docker build -t plm-files-preview-services -f Dockerfile .`  
 
-2、然后执行启动服务指令
+2、然后执行启动服务指令  
 `docker-compose up -d`
