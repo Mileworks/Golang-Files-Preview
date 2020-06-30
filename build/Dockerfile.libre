@@ -6,11 +6,7 @@ ENV LC_ALL zh_CN.UTF-8
 
 WORKDIR /opt/
 
-EXPOSE 8079
-
 COPY fonts/* /usr/share/fonts/chienes/
-
-ADD plm-files-preview.tar.gz .
 
 # libreoffice
 RUN apt-get update  && apt-get install -y locales &&\
@@ -58,5 +54,3 @@ RUN apt-get update  && apt-get install -y locales &&\
     fc-cache -fv
 
 RUN adduser --home=/opt/libreoffice --disabled-password --gecos "" --shell=/bin/bash libreoffice
-
-ENTRYPOINT ["nohup","/opt/plm-files-preview","&"]

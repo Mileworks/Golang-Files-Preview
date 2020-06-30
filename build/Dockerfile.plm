@@ -1,0 +1,13 @@
+FROM registry.cn-hangzhou.aliyuncs.com/plm-services/plm_files_preview_base:latest
+MAINTAINER long0419 "borrip0419@gmail.com"
+
+ENV LANG zh_CN.UTF-8
+ENV LC_ALL zh_CN.UTF-8
+
+WORKDIR /opt/
+
+EXPOSE 8079
+
+ADD plm-files-preview.tar.gz .
+
+ENTRYPOINT ["nohup","/opt/plm-files-preview","&"]

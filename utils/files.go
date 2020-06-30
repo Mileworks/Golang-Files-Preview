@@ -19,7 +19,9 @@ var (
 	AllImageEtx   = []string{".jpg", ".png", ".gif", ".bmp", ".heic", ".tiff"}
 	AllCADEtx     = []string{".dwg", ".dxf"}
 	AllAchieveEtx = []string{".tar.gz", ".tar.bzip2", ".tar.xz", ".zip", ".rar", ".tar", ".7z", "br", ".bz2", ".lz4", ".sz", ".xz", ".zstd"}
-	AllTxtEtx     = []string{".txt", ".java", ".php", ".py", ".md", ".js", ".css"}
+	AllTxtEtx     = []string{".txt", ".java", ".php", ".py", ".md", ".js", ".css",".xml",".log"}
+	AllVideoEtx     = []string{".mp4", ".webm", ".ogg"}
+
 )
 
 func FileTypeVerify(url string) (string, string) {
@@ -54,6 +56,12 @@ func FileTypeVerify(url string) (string, string) {
 	for _, x := range AllTxtEtx {
 		if strings.Contains(url, x) {
 			return "txt", x
+		}
+	}
+
+	for _, x := range AllVideoEtx {
+		if strings.Contains(url, x) {
+			return "video", x
 		}
 	}
 

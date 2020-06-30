@@ -161,14 +161,14 @@
 <div class="container">
     <form id="contact" action="/api/preview" method="get">
         <h3>{{.plm}}</h3>
-        <h4>Preview for office\pdf\cad\achieve\txt\image files</h4>
+        <h4>Preview for office\pdf\cad\achieve\txt\image\video files</h4>
         <fieldset>
             <input placeholder="请输入预览文件 url" type="text" tabindex="1" name="previewUrl" required autofocus>
         </fieldset>
         <fieldset>
             <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">预览</button>
         </fieldset>
-        <p class="copyright">Written by Golang</a></p>
+        <p class="copyright">Written by Golang</p>
     </form>
 </div>
 </body>

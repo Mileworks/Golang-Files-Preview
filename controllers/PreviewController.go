@@ -69,8 +69,15 @@ func (c *PreviewController) Preview() {
 
 		break
 	case fileType == "txt":
-		c.Data["url"] = previewUrl
+		local, _ := utils.DownloadFile(previewUrl, fileSuffix)
+
+		c.Data["url"] = "http://" + host + "/api/getfile?file=" + local
 		c.TplName = "preview.tpl"
+		break
+
+	case fileType == "video":
+		c.Data["url"] = previewUrl
+		c.TplName = "video.tpl"
 		break
 
 	default:
@@ -113,6 +120,10 @@ func (c *PreviewController) AchieveFileForReview() {
 
 	case fileType == "txt":
 		c.Ctx.Output.ContentType("text/plain")
+		break
+
+	case fileType == "video":
+		c.Ctx.Output.ContentType("video/mp4")
 		break
 
 	default:
