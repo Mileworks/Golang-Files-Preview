@@ -1,1 +1,2 @@
 *.tpl linguist-language=Go
+*.yml linguist-language=Dockerfile
