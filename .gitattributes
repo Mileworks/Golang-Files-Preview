@@ -1,0 +1,2 @@
+*.tpl linguist-language=Go
+docker-compose.yml linguist-language=Dockerfile
