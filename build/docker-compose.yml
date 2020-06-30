@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  plm-file-preview:
+  plm-file-preview-0.1:
     image: registry.cn-hangzhou.aliyuncs.com/plm-services/plm_files_preview:latest
     container_name: plm-file-preview-services
     ports:
