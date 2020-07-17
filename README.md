@@ -7,6 +7,8 @@
 3、压缩文件预览：tar.gz\tar.bzip2\tar.xz\zip\rar\tar\brotli\bzip2\flate\gzip\lz4\snappy\xz\zstandard  
 4、支持txt,java,php,py,md,js,css等所有纯文本  
 5、支持jpg，jpeg，png，gif等图片预览
+6、支持avi，mp4，flv等视频预览
+
 
 效果图
 
