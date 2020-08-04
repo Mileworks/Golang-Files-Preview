@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"github.com/mholt/archiver/v3"
 	"log"
 	"os"
@@ -16,12 +15,11 @@ import (
 
 var (
 	AllOfficeEtx  = []string{".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"}
-	AllImageEtx   = []string{".jpg", ".png", ".gif", ".bmp", ".heic", ".tiff"}
+	AllImageEtx   = []string{".jpeg", ".jpg", ".png", ".gif", ".bmp", ".heic", ".tiff"}
 	AllCADEtx     = []string{".dwg", ".dxf"}
 	AllAchieveEtx = []string{".tar.gz", ".tar.bzip2", ".tar.xz", ".zip", ".rar", ".tar", ".7z", "br", ".bz2", ".lz4", ".sz", ".xz", ".zstd"}
-	AllTxtEtx     = []string{".txt", ".java", ".php", ".py", ".md", ".js", ".css",".xml",".log"}
-	AllVideoEtx     = []string{".mp4", ".webm", ".ogg"}
-
+	AllTxtEtx     = []string{".txt", ".java", ".php", ".py", ".md", ".js", ".css", ".xml", ".log"}
+	AllVideoEtx   = []string{".mp4", ".webm", ".ogg"}
 )
 
 func FileTypeVerify(url string) (string, string) {
@@ -90,7 +88,7 @@ func File2Bytes(filename string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("read file %s len: %d \n", filename, count)
+	log.Printf("read file %s len: %d \n", filename, count)
 	return data, nil
 }
 
@@ -100,31 +98,28 @@ func UnarchiveFiles(file string) {
 	archiver.Unarchive(file, "tmp/decompress/"+decompressName)
 }
 
-func GetFilesFromDirectory(source string, uri string) (map[string]string, string) {
+func GetFilesFromDirectory(source string) ([]string, string) {
 
 	decompressName := strings.TrimSuffix(path.Base(source), path.Ext(path.Base(source)))
-	base := "tmp/decompress/" + decompressName + "/" + decompressName
-	if IsDir(base) {
-		base = "tmp/decompress/" + decompressName + "/" + decompressName + "/*"
-	}else{
-		base = "tmp/decompress/" + decompressName + "/*"
-	}
-	files, _ := filepath.Glob(base)
-	baseUrl := uri + "/api/preview?previewUrl="
+	base := "tmp/decompress/" + decompressName
 
-	treeMap := make(map[string]string)
-	for _, fp := range files {
-		reviewUrl := uri + "/api/review?file=" + fp
-		treeMap[path.Base(fp)] = baseUrl + reviewUrl
+	files, _ := filepath.Glob(filepath.Join(base, "*"))
+	for i := range files {
+		// __MACOSX 目录 过滤掉
+		if strings.Index(files[i], "__MACOSX") == -1 {
+			base = files[i]
+			break
+		}
 	}
 
-	return treeMap, base[:len(base)-2]
-}
-
-func IsDir(path string) bool {
-	s, err := os.Stat(path)
-	if err != nil {
-		return false
+	files, _ = filepath.Glob(filepath.Join(base, "*"))
+	// Mac 过滤__MACOSX 目录 和.DS_Store 文件
+	var files_result []string
+	for i := range files {
+		if strings.Index(files[i], "__MACOSX") == -1 && strings.Index(files[i], ".DS_Store") == -1 {
+			files_result = append(files_result, files[i])
+		}
 	}
-	return s.IsDir()
+
+	return files_result, base[:len(base)-2]
 }

@@ -14,6 +14,7 @@ func init() {
 	beego.Router("/api/getfile", &controllers.PreviewController{}, "get:GetFile")
 	beego.Router("/api/review", &controllers.PreviewController{}, "get:AchieveFileForReview")
 
+	beego.Router("/api/plmfile", &controllers.PLMFileController{}, "post:PLMPreview")
 
 	//beego.Router("/api/create", &controllers.PreviewController{}, "post:CreatePreview")
 	//beego.Router("/api/update", &controllers.PreviewController{}, "put:UpdatePreview")
