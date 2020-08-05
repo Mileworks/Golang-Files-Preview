@@ -24,7 +24,13 @@ func IsFileExist(filename string, filesize int64) bool {
 	return false
 }
 
-func DownloadFile(source string, fileSuffix string) (string, error) {
+func DownloadFile(source string, fileSuffix string, filenameWithSuffix string) (string, error) {
+
+	basePath := "tmp/download/" + filenameWithSuffix
+	if FileExist(basePath) {
+		return basePath, nil
+	}
+
 	var (
 		fsize   int64
 		buf     = make([]byte, 32*1024)

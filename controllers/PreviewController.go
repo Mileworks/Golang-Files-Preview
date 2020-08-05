@@ -23,7 +23,7 @@ func (c *PreviewController) Preview() {
 		panic(errors.New("请输入正确的预览url 地址"))
 	}
 
-	fileType, fileSuffix := utils.FileTypeVerify(previewUrl)
+	fileType, fileSuffix, filenameWithSuffix := utils.FileTypeVerify(previewUrl)
 	host := c.Ctx.Request.Host
 
 	switch {
@@ -39,7 +39,7 @@ func (c *PreviewController) Preview() {
 
 	case fileType == "cad":
 
-		local, _ := utils.DownloadFile(previewUrl, fileSuffix)
+		local, _ := utils.DownloadFile(previewUrl, fileSuffix, filenameWithSuffix)
 		resultPath := utils.ConvertFromCADToPDF(local)
 
 		c.Data["url"] = "http://" + host + "/api/getfile?file=" + resultPath
@@ -48,7 +48,7 @@ func (c *PreviewController) Preview() {
 		break
 	case fileType == "office":
 
-		local, _ := utils.DownloadFile(previewUrl, fileSuffix)
+		local, _ := utils.DownloadFile(previewUrl, fileSuffix, filenameWithSuffix)
 		resultPath := utils.ConvertToPDF(local)
 
 		c.Data["url"] = "http://" + host + "/api/getfile?file=" + resultPath
@@ -57,19 +57,28 @@ func (c *PreviewController) Preview() {
 		break
 	case fileType == "achieve":
 
-		local, _ := utils.DownloadFile(previewUrl, fileSuffix)
+		local, _ := utils.DownloadFile(previewUrl, fileSuffix, filenameWithSuffix)
 		utils.UnarchiveFiles(local)
 
-		treeData, base := utils.GetFilesFromDirectory(local, "http://" + host)
+		files, base := utils.GetFilesFromDirectory(local)
+
+		// process preview url
+		uri := "http://" + c.Ctx.Request.Host
+		baseUrl := uri + "/api/preview?previewUrl="
+		treeMap := make(map[string]string)
+		for _, fp := range files {
+			reviewUrl := uri + "/api/review?file=" + fp
+			treeMap[path.Base(fp)] = baseUrl + reviewUrl
+		}
 
 		c.Data["base"] = base
 		c.Data["top"] = strings.TrimSuffix(path.Base(local), path.Ext(path.Base(local)))
-		c.Data["treeData"] = treeData
+		c.Data["treeData"] = treeMap
 		c.TplName = "achieve.tpl"
 
 		break
 	case fileType == "txt":
-		local, _ := utils.DownloadFile(previewUrl, fileSuffix)
+		local, _ := utils.DownloadFile(previewUrl, fileSuffix, filenameWithSuffix)
 
 		c.Data["url"] = "http://" + host + "/api/getfile?file=" + local
 		c.TplName = "preview.tpl"
@@ -99,7 +108,7 @@ func (c *PreviewController) GetFile() {
 func (c *PreviewController) AchieveFileForReview() {
 	fName := c.GetString("file")
 
-	fileType, _ := utils.FileTypeVerify(fName)
+	fileType, _, _ := utils.FileTypeVerify(fName)
 
 	switch {
 	case fileType == "pdf":

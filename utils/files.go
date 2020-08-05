@@ -22,48 +22,55 @@ var (
 	AllVideoEtx   = []string{".mp4", ".webm", ".ogg"}
 )
 
-func FileTypeVerify(url string) (string, string) {
+func FileTypeVerify(url string) (string, string, string) {
+	filenameWithSuffix := path.Base(url)   //获取文件名带后缀
+	filesuffix := path.Ext(url)            //文件后缀
+	if strings.Contains(filesuffix, "?") { //单独测试过
+		filesuffix = filesuffix[0 : strings.Index(filesuffix, "?")]
+		filenameWithSuffix = filenameWithSuffix[0 : strings.Index(filenameWithSuffix, "?")]
+	}
+
 	if strings.Contains(url, ".pdf") {
-		return "pdf", ".pdf"
+		return "pdf", ".pdf", filenameWithSuffix
 	}
 
 	for _, x := range AllOfficeEtx {
-		if strings.Contains(url, x) {
-			return "office", x
+		if filesuffix == x {
+			return "office", x, filenameWithSuffix
 		}
 	}
 
 	for _, x := range AllImageEtx {
 		if strings.Contains(url, x) {
-			return "image", x
+			return "image", x, filenameWithSuffix
 		}
 	}
 
 	for _, x := range AllCADEtx {
 		if strings.Contains(url, x) {
-			return "cad", x
+			return "cad", x, filenameWithSuffix
 		}
 	}
 
 	for _, x := range AllAchieveEtx {
 		if strings.Contains(url, x) {
-			return "achieve", x
+			return "achieve", x, filenameWithSuffix
 		}
 	}
 
 	for _, x := range AllTxtEtx {
 		if strings.Contains(url, x) {
-			return "txt", x
+			return "txt", x, filenameWithSuffix
 		}
 	}
 
 	for _, x := range AllVideoEtx {
 		if strings.Contains(url, x) {
-			return "video", x
+			return "video", x, filenameWithSuffix
 		}
 	}
 
-	return "", ""
+	return "", "", filenameWithSuffix
 
 }
 
@@ -112,7 +119,7 @@ func GetFilesFromDirectory(source string) ([]string, string) {
 		}
 	}
 
-	files, _ = filepath.Glob(filepath.Join(base, "*"))
+	files, _ = filepath.Glob(filepath.Join(base, "*.*"))
 	// Mac 过滤__MACOSX 目录 和.DS_Store 文件
 	var files_result []string
 	for i := range files {
@@ -122,4 +129,18 @@ func GetFilesFromDirectory(source string) ([]string, string) {
 	}
 
 	return files_result, base[:len(base)-2]
+}
+
+func FileExist(path string) bool {
+	_, err := os.Lstat(path)
+	return !os.IsNotExist(err)
+}
+
+func GetFileNameOnly(url string) string {
+
+	filenameWithSuffix := path.Base(url)                               //获取文件名带后缀
+	fileSuffix := path.Ext(filenameWithSuffix)                         //获取文件后缀
+	filenameOnly := strings.TrimSuffix(filenameWithSuffix, fileSuffix) //获取文件名
+
+	return filenameOnly
 }

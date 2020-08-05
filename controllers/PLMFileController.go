@@ -28,8 +28,9 @@ func (c *PLMFileController) PLMPreview() {
 	}
 
 	// 2、下载当前的文件，并通过文件后缀进行预览
-	fileType, fileSuffix := utils.FileTypeVerify(downLoadUrl)
-	local, _ := utils.DownloadFile(downLoadUrl, fileSuffix)
+	var local string
+	fileType, fileSuffix, filenameWithSuffix := utils.FileTypeVerify(downLoadUrl)
+	local, _ = utils.DownloadFile(downLoadUrl, fileSuffix , filenameWithSuffix)
 
 	if fileType == "achieve" {
 		utils.UnarchiveFiles(local)
@@ -48,7 +49,6 @@ func (c *PLMFileController) PLMPreview() {
 			treeMap}
 
 		c.SuccessJson(achieveFiles)
-
 		return
 	}
 
