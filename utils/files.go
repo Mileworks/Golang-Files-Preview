@@ -26,8 +26,8 @@ func FileTypeVerify(url string) (string, string, string) {
 	filenameWithSuffix := path.Base(url)   //获取文件名带后缀
 	filesuffix := path.Ext(url)            //文件后缀
 	if strings.Contains(filesuffix, "?") { //单独测试过
-		filesuffix = filesuffix[0 : strings.Index(filesuffix, "?")]
-		filenameWithSuffix = filenameWithSuffix[0 : strings.Index(filenameWithSuffix, "?")]
+		filesuffix = filesuffix[0:strings.Index(filesuffix, "?")]
+		filenameWithSuffix = filenameWithSuffix[0:strings.Index(filenameWithSuffix, "?")]
 	}
 
 	if strings.Contains(url, ".pdf") {
@@ -124,6 +124,10 @@ func GetFilesFromDirectory(source string) ([]string, string) {
 	var files_result []string
 	for i := range files {
 		if strings.Index(files[i], "__MACOSX") == -1 && strings.Index(files[i], ".DS_Store") == -1 {
+			// 清空字符串名中空格并重命名
+			os.Rename(files[i], strings.Replace(files[i], " ", "", -1))
+			files[i] = strings.Replace(files[i], " ", "", -1)
+
 			files_result = append(files_result, files[i])
 		}
 	}
