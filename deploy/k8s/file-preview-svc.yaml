@@ -1,0 +1,56 @@
+# Copyright 2020 PLM xulong
+#
+##################################################################################################
+# FilePreiew service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: plm-file-preview
+  namespace: file-preview
+  labels:
+    app: plm-file-preview
+    service: plm-file-preview
+spec:
+  ports:
+  - port: 8079
+    name: http
+  selector:
+    app: plm-file-preview
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: plm-file-preview
+  namespace: file-preview
+  labels:
+    account: plm-file-preview
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plm-file-preview
+  namespace: file-preview
+  labels:
+    app: plm-file-preview
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: plm-file-preview
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: plm-file-preview
+        version: v1
+    spec:
+      serviceAccountName: plm-file-preview
+      containers:
+      - name: plm-file-preview
+        image: registry.cn-shenzhen.aliyuncs.com/plm-services/plm-files-preview:0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8079
+---
